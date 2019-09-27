@@ -1,0 +1,41 @@
+# Data dictionary
+
+There are 4 tables in the snowflake schema that are covered in this data dictionary
+
+## Location
+
+* location_id - integer that presents individual location defined as tuple of city, country, longitude and latitude. Created within the cleaning process as monotonically increasing id for each  It is a primary key of Location dimension table.
+* country - name of country. It comes from global temperature dataset as part of distinct tuples of city, country, longitude and latitude.
+* city - name of city. It comes from global temperature dataset as part of distinct tuples of city, country, longitude and latitude.
+* longitude - longitude of city as number. It comes from global temperature dataset as part of distinct tuples of city, country, longitude and latitude. Set to zero if null.
+* latitude - latitude of city as number. It comes from global temperature dataset as part of distinct tuples of city, country, longitude and latitude. Set to zero if null.
+
+## Temperature
+
+* date - date on which temperature is measured. Formatted as YYYY-MM-DD. It comes from the global temperature dataset. It is also foreign key as to join to Time dimension table.
+* location_id - it is a foreign key and used to join records to the primary key of Location table. Created as part of the cleaning process.
+* average_temperature - average daily temperature in Celsius per date and location. Location is defined as tuple of city, country, longitude and latitude. It comes directly from global temperature dataset and has not gone through any data transformations. Missing values have been dropped.
+* average_temperature_uncertainty - an estimate of average temperature uncertainty in Celsius per date and location. Comes from the temperature dataset. Missing values have been dropped.
+
+# Time
+
+* date - date on which temperature is measured. Formatted as YYYY-MM-DD. It comes from the global temperature dataset as all distinct dates in the dataframe.
+* year - year of the date column. Calculated field with format YYYY.
+* month - month of the date column. Calculated field with format MM.
+* day - day of the month of the date column. Calculated field with format DD.
+* week - week number to which the date belongs to. Calculated field as integer.
+
+## US_demographics
+
+* us_location_id - primary id of the us_demographics table. It is created as monotonically increasing id based on tuple of city and state from the U.S. demographics dataset.
+* location_id - id for joining to Location table. It is created as part of the cleaning process. If there is match between cities in the global temperature and U.S. demographics datasets for country being United States, then the location_id from the Location table is copied over. If not, value 0 is add.
+* city - name of U.S. city. Comes from the U.S. demographics dataset.
+* state - name of U.S. state. Comes from the U.S. demographics dataset.
+* median_age - median age per U.S. city. Comes from the U.S. demographics dataset. Missing values are set to zero.
+* male_population - number of males per U.S. city. Comes from the U.S. demographics dataset. Missing values are set to zero. Missing values are set to zero.
+* female_population - number of females per U.S. city. Comes from the U.S. demographics dataset. Missing values are set to zero.S. city. Comes from the U.S. demographics dataset. Missing values are set to zero. Missing values are set to zero.
+* total_population - total number of citizens per U.S. city. Comes from the U.S. demographics dataset. Missing values are set to zero.
+* number_of_veterans - total number of veterans per U.S. city. Comes from the U.S. demographics dataset. Missing values are set to zero.
+* foreign_born - total number of foreign born citizens per U.S. city. Comes from the U.S. demographics dataset. Missing values are set to zero.
+* average_household - average number of people in a household per U.S. city. Comes from the U.S. demographics dataset. Missing values are set to zero.
+* state_code - abbreviation of U.S. state. Formatted as 'XX'. Comes from the U.S. demographics dataset.
